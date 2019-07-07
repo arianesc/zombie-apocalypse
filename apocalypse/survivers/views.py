@@ -35,7 +35,7 @@ def survivers_list(request):
 @api_view(['GET', 'PUT'])
 def surviver_update_location(request, pk):
     """
-    Retrieve or update a code surviver.
+    Update location from surviver.
     """
     try:
         survivers = Surviver.objects.get(pk=pk)
