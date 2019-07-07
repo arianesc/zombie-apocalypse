@@ -28,9 +28,9 @@ def survivers_list(request):
     if request.method == 'GET':
         survivers = Surviver.objects.all()
         serializer = SurviverSerializer(survivers, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET', 'PUT'])
+@api_view(['PUT'])
 def surviver_update_location(request, pk):
     """
     Update location from surviver.
@@ -40,20 +40,15 @@ def surviver_update_location(request, pk):
     except Surviver.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        survivers = SurviverSerializer(survivers)
-        return Response(survivers.data)
-
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         serializer = SurviverSerializer(survivers, data=request.data, partial=True)
         for value in request.data.keys():
-            print(value)
             if value != "latitude" and value != "longitude":
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
