@@ -1,14 +1,12 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
 from survivers.models import Surviver
 from survivers.serializers import SurviverSerializer
 from rest_framework.response import Response
+from django.db.models import Sum
 
-ITEMS = {'water': 4 , 'food': 3 , 'medications': 2 , 'ammunition': 1 }
+ITEMS_VALUES = {'water': 4 , 'food': 3 , 'medication': 2 , 'ammunition': 1 }
 
 @api_view(['POST'])
 def survivers_create(request):
