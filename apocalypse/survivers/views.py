@@ -61,10 +61,20 @@ def surviver_update_location(request, pk):
 @api_view(['PUT'])
 def relate_infected(request, pk):
     """
-    Relate infected surviver
+    relate infected surviver.
     """
+    try:
+        survivers = Surviver.objects.get(pk=pk)
+    except Surviver.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    pass
-
-
-
+    if request.method == 'PUT' and len(request.data.keys()) == 1:
+        if "infected" in request.data.keys():
+            data = {"infected": survivers.infected + 1}
+            serializer = SurviverSerializer(survivers, data=data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
