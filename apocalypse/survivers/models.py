@@ -3,11 +3,11 @@ from django.core.validators import MinValueValidator
 
 
 class Surviver(models.Model):
-    name = models.CharField(max_length=100, blank=True, default='')
+    name = models.CharField(max_length=100)
     age = models.IntegerField(validators=[MinValueValidator(0)])
     gender = models.CharField( max_length=10)
-    latitude = models.CharField(max_length=100, blank=True, null=True)
-    longitude = models.CharField(max_length=100, blank=True, null=True)
+    latitude = models.CharField(max_length=100)
+    longitude = models.CharField(max_length=100)
     food = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     water = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     medication = models.IntegerField(validators=[MinValueValidator(0)], default=0)
