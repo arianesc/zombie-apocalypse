@@ -56,6 +56,7 @@ def surviver_update_location(request, pk):
 def relate_infected(request, pk):
 
     """ relate infected surviver """
+
     try:
         survivers = Surviver.objects.get(pk=pk)
     except Surviver.DoesNotExist:
