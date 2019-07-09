@@ -139,52 +139,54 @@ def show_reports(request):
     return Response({'report': data}, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['PUT'])
 def trades_item_surviver(request, pk1, pk2):
     """
    
     """
-    try:
-        surviver1 = Surviver.objects.get(pk=pk1)
-        surviver2 = Surviver.objects.get(pk=pk2)
+    if request.method == 'PUT':
+        try:
+            surviver1 = Surviver.objects.get(pk=pk1)
+            surviver2 = Surviver.objects.get(pk=pk2)
 
-    except Surviver.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        except Surviver.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    food1 = int(request.GET.get('food1', '0'))
-    water1 = int(request.GET.get('water1', '0'))
-    medication1 = int(request.GET.get('medication1', '0'))
-    ammunition1 = int(request.GET.get('ammunition1', '0'))
+        food1 = int(request.GET.get('food1', '0'))
+        water1 = int(request.GET.get('water1', '0'))
+        medication1 = int(request.GET.get('medication1', '0'))
+        ammunition1 = int(request.GET.get('ammunition1', '0'))
 
-    food2 = int(request.GET.get('food2', '0'))
-    water2 = int(request.GET.get('water2', '0'))
-    medication2 = int(request.GET.get('medication2', '0'))
-    ammunition2 = int(request.GET.get('ammunition2', '0'))
+        food2 = int(request.GET.get('food2', '0'))
+        water2 = int(request.GET.get('water2', '0'))
+        medication2 = int(request.GET.get('medication2', '0'))
+        ammunition2 = int(request.GET.get('ammunition2', '0'))
 
 
-    sum1 = food1 * ITEMS_VALUES['food'] + water1 * ITEMS_VALUES['water']\
-            + medication1 * ITEMS_VALUES['medication'] +  ammunition1 * ITEMS_VALUES['ammunition']
+        sum1 = food1 * ITEMS_VALUES['food'] + water1 * ITEMS_VALUES['water']\
+                + medication1 * ITEMS_VALUES['medication'] +  ammunition1 * ITEMS_VALUES['ammunition']
 
-    sum2 = food2 * ITEMS_VALUES['food'] + water2 * ITEMS_VALUES['water']\
-            + medication2 * ITEMS_VALUES['medication'] +  ammunition2 * ITEMS_VALUES['ammunition']
+        sum2 = food2 * ITEMS_VALUES['food'] + water2 * ITEMS_VALUES['water']\
+                + medication2 * ITEMS_VALUES['medication'] +  ammunition2 * ITEMS_VALUES['ammunition']
 
-    if sum1 == sum2:
-        data1 = {"food":food2 + surviver1.food - food1,
-                 "water":water2 + surviver1.water - water1,
-                 "medication":medication2 + surviver1.medication - medication1,
-                 "ammunition":ammunition2 + surviver1.ammunition - ammunition1}
-        data2 = {"food":food1 + surviver2.food - food2,
-                 "water":water1 + surviver2.water - water2,
-                 "medication":medication1 + surviver2.medication - medication2,
-                 "ammunition":ammunition1 + surviver2.ammunition - ammunition2}
+        if sum1 == sum2:
+            data1 = {"food":food2 + surviver1.food - food1,
+                    "water":water2 + surviver1.water - water1,
+                    "medication":medication2 + surviver1.medication - medication1,
+                    "ammunition":ammunition2 + surviver1.ammunition - ammunition1}
+            data2 = {"food":food1 + surviver2.food - food2,
+                    "water":water1 + surviver2.water - water2,
+                    "medication":medication1 + surviver2.medication - medication2,
+                    "ammunition":ammunition1 + surviver2.ammunition - ammunition2}
 
-        serializer1 = SurviverSerializer(surviver1, data=data1, partial=True)
-        serializer2 = SurviverSerializer(surviver2, data=data2, partial=True)
+            serializer1 = SurviverSerializer(surviver1, data=data1, partial=True)
+            serializer2 = SurviverSerializer(surviver2, data=data2, partial=True)
 
-    if serializer1.is_valid() and serializer2.is_valid():
-        serializer1.save()
-        serializer2.save()
-        return Response(status=status.HTTP_200_OK)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        if serializer1.is_valid() and serializer2.is_valid():
+            serializer1.save()
+            serializer2.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    return Response(status=status.HTTP_400_BAD_REQUEST)
