@@ -12,8 +12,12 @@ ITEMS_VALUES = {'water': 4 , 'food': 3 , 'medication': 2 , 'ammunition': 1 }
 
 class ModelTest(TestCase):
 
+    """ Testing model """
+
     def test_create_surviver(self):
+
         """ Test create a new surviver"""
+
         name = "Ana"
         age = 19
         gender = "female"
@@ -39,7 +43,9 @@ class ModelTest(TestCase):
         self.assertEquals(surviver,  surviver_db)
 
     def test_create_wrong_surviver(self):
+
         """ Test create a wrong surviver because missing obrigatory fields"""
+
         name = "Maria"
         age = 14
         surviver = Surviver(name=name)
@@ -48,6 +54,8 @@ class ModelTest(TestCase):
         self.assertEqual(IntegrityError, type(raised.exception))
 
 class ReportTest(TestCase):
+
+    """ Testing Reports"""
 
     def setUp(self):
         name = "Ana"
@@ -98,14 +106,18 @@ class ReportTest(TestCase):
         surviver2.save()
 
     def test_mean_infected(self):
+
         """ Test method that calculate the mean of infected survivers """
+
         surviver = Surviver.objects.all()
         infected, not_infected = calc_mean_infected(surviver)
         self.assertEqual(infected, 50.0)
         self.assertEqual(not_infected, 50.0)
 
     def test_mean_surviver_resources(self):
+
         """ Test method that calculate the mean of resources from survivers"""
+
         survivers = Surviver.objects.all()
         food, water, medication, ammunition = calc_mean_surviver_resources(survivers)
 
@@ -115,7 +127,9 @@ class ReportTest(TestCase):
         self.assertEqual(ammunition, 4)
 
     def test_calc_lost_points(self):
+
         """ Test the method that calculate the lost points for infected survivers """
+
         items = Surviver.objects.filter(infected__gte=(3)).aggregate(
             Sum('food'), Sum('water'), Sum('medication'), Sum('ammunition'))
 
@@ -123,6 +137,8 @@ class ReportTest(TestCase):
         self.assertEqual(lost_points, 62)
 
 class LocationTestCase(TestCase):
+
+    """ Testin update location """
 
     def setUp(self):
         self.client = APIClient()
@@ -152,12 +168,16 @@ class LocationTestCase(TestCase):
 
     def test_surviver_update_location(self):
 
+        """ Test with a right fields to update location """
+
         latitude = "212"
         longitude = "111"
         response = self.client.put('/api/survivers/update_location/1/', {'longitude': longitude, 'latitude':latitude})
         self.assertEqual(response.status_code, 200)
 
     def test_surviver_update_location_wrong(self):
+
+        """ Test with wrong fields to update location """
 
         latitude = "212"
         longitude = "111"
