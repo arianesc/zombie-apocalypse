@@ -4,7 +4,8 @@ from django.db import IntegrityError
 from rest_framework.test import APIClient
 from survivers.views import calc_mean_infected\
                             ,calc_mean_surviver_resources\
-                            ,calc_lost_points
+                            ,calc_lost_points\
+                            ,surviver_update_location
 from django.db.models import Sum
 
 ITEMS_VALUES = {'water': 4 , 'food': 3 , 'medication': 2 , 'ammunition': 1 }
@@ -120,3 +121,46 @@ class ReportTest(TestCase):
 
         lost_points = calc_lost_points(items)
         self.assertEqual(lost_points, 62)
+
+class LocationTestCase(TestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        name = "Ana"
+        age = 19
+        gender = "female"
+        latitude = "1871817"
+        longitude = "88888"
+        food = 2
+        water = 9
+        medication = 8
+        ammunition = 4
+        infected = 0
+        surviver = Surviver(
+            name = name,
+            age = age,
+            gender = gender,
+            latitude = latitude,
+            longitude = longitude,
+            food = food,
+            water = water,
+            medication = medication,
+            ammunition = ammunition,
+            infected = infected,
+        )
+        surviver.save()
+
+    def test_surviver_update_location(self):
+
+        latitude = "212"
+        longitude = "111"
+        response = self.client.put('/api/survivers/update_location/1/', {'longitude': longitude, 'latitude':latitude})
+        self.assertEqual(response.status_code, 200)
+
+    def test_surviver_update_location_wrong(self):
+
+        latitude = "212"
+        longitude = "111"
+        name = "Maria"
+        response = self.client.put('/api/survivers/update_location/1/', {'longitude': longitude, 'latitude':latitude, 'name':name})
+        self.assertEqual(response.status_code, 400)
