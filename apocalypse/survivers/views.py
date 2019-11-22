@@ -139,6 +139,8 @@ def show_reports(request):
 
     """ Show all resports """
 
+    print("okay")
+
     if request.method == 'GET':
         mean_infected = percentage_infected_survivors()
         mean_resources = mean_surviver_resources()
