@@ -14,7 +14,7 @@ def survivers_create(request):
 
     """ Create a new surviver """
 
-    if request.method == 'POST':
+  #  if request.method == 'POST':
         serializer = SurviverSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
