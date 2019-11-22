@@ -49,6 +49,8 @@ jobs:
           command: |
             . venv/bin/activate
             cd apocalypse
+            python manage.py makemigrations
+            python manage.py migrate
             python manage.py test
       - store_artifacts:
           path: test-reports
